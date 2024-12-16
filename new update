@@ -4,7 +4,12 @@
 set -e
 
 # Log file
-LOGFILE="update_log.txt"
+LOGFILE="/var/log/packageupdateslogs/update_log.txt"
+
+# Create the log directory if it doesn't exist
+if [ ! -d "/var/log/packageupdateslogs" ]; then
+    mkdir -p /var/log/packageupdateslogs
+fi
 
 # Function to log messages
 log_message() {
@@ -13,28 +18,23 @@ log_message() {
 
 # Update package index
 log_message "Updating package index..."
-sudo apt-get update -q 2>> "$LOGFILE"
+apt-get update -q 2>> "$LOGFILE"
 
 # Upgrade installed packages
 log_message "Upgrading installed packages..."
-sudo apt-get full-upgrade -y -q 2>> "$LOGFILE"
+apt-get full-upgrade -y -q 2>> "$LOGFILE"
 
 # Remove unnecessary packages
 log_message "Removing unnecessary packages..."
-sudo apt-get autoremove -y -q 2>> "$LOGFILE"
+apt-get autoremove -y -q 2>> "$LOGFILE"
 
 # Clean up local repository
 log_message "Cleaning up local repository..."
-sudo apt-get autoclean -q 2>> "$LOGFILE"
-
-# Note: autopurge is not a standard command; consider using purge for specific packages if needed
-# Uncomment the following line if you have specific packages to purge
-# log_message "Purging specific packages..."
-# sudo apt-get purge <package_name> | tee -a "$LOGFILE"
+apt-get autoclean -q 2>> "$LOGFILE"
 
 # Update Flatpak applications
 log_message "Updating Flatpak applications..."
-sudo flatpak update -y 2>> "$LOGFILE"
+flatpak update -y 2>> "$LOGFILE"
 
 # Completion message
-log_message "All updates and cleanups completed successfully at $(date)!"
+log_message "All updates and cleanups completed successfully at $(date)! Log file: $LOGFILE"
