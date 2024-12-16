@@ -41,5 +41,4 @@ The OSI (Open Systems Interconnection) model is a conceptual framework used to u
 * **Protocols:** HTTP (Hypertext Transfer Protocol), FTP (File Transfer Protocol), SMTP (Simple Mail Transfer Protocol), DNS (Domain Name System)
 * **Attacks:** SQL injection, cross-site scripting (XSS), cross-site request forgery (CSRF), buffer overflow attacks, command injection attacks
 
-Note that this is not an exhaustive list, and there are many other protocols and attacks associated with each layer.
 EOF
