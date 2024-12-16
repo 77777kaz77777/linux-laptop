@@ -1,42 +1,40 @@
 #!/bin/bash
 
-# Function to check the exit status of the last command
-check_status() {
-    if [ $? -ne 0 ]; then
-        echo "Error occurred during the last command. Exiting."
-        exit 1
-    fi
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Log file
+LOGFILE="update_log.txt"
+
+# Function to log messages
+log_message() {
+    echo "$1" | tee -a "$LOGFILE"
 }
 
 # Update package index
-echo "Updating package index..."
-sudo apt update
-check_status
+log_message "Updating package index..."
+sudo apt update -q | tee -a "$LOGFILE"
 
 # Upgrade installed packages
-echo "Upgrading installed packages..."
-sudo apt full-upgrade
-check_status
+log_message "Upgrading installed packages..."
+sudo apt full-upgrade -y -q | tee -a "$LOGFILE"
 
 # Remove unnecessary packages
-echo "Removing unnecessary packages..."
-sudo apt autoremove
-check_status
+log_message "Removing unnecessary packages..."
+sudo apt autoremove -y -q | tee -a "$LOGFILE"
 
 # Clean up local repository
-echo "Cleaning up local repository..."
-sudo apt autoclean
-check_status
+log_message "Cleaning up local repository..."
+sudo apt autoclean -q | tee -a "$LOGFILE"
 
 # Note: autopurge is not a standard command; consider using purge for specific packages if needed
 # Uncomment the following line if you have specific packages to purge
-# echo "Purging specific packages..."
-# sudo apt purge <package_name>
-# check_status
+# log_message "Purging specific packages..."
+# sudo apt purge <package_name> | tee -a "$LOGFILE"
 
 # Update Flatpak applications
-echo "Updating Flatpak applications..."
-sudo flatpak update
-check_status
+log_message "Updating Flatpak applications..."
+sudo flatpak update -y | tee -a "$LOGFILE"
 
-echo "All updates and cleanups completed successfully at $(date)!"
+# Completion message
+log_message "All updates and cleanups completed successfully at $(date)!"
