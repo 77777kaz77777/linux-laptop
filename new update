@@ -13,28 +13,28 @@ log_message() {
 
 # Update package index
 log_message "Updating package index..."
-sudo apt update -q | tee -a "$LOGFILE"
+sudo apt-get update -q 2>> "$LOGFILE"
 
 # Upgrade installed packages
 log_message "Upgrading installed packages..."
-sudo apt full-upgrade -y -q | tee -a "$LOGFILE"
+sudo apt-get full-upgrade -y -q 2>> "$LOGFILE"
 
 # Remove unnecessary packages
 log_message "Removing unnecessary packages..."
-sudo apt autoremove -y -q | tee -a "$LOGFILE"
+sudo apt-get autoremove -y -q 2>> "$LOGFILE"
 
 # Clean up local repository
 log_message "Cleaning up local repository..."
-sudo apt autoclean -q | tee -a "$LOGFILE"
+sudo apt-get autoclean -q 2>> "$LOGFILE"
 
 # Note: autopurge is not a standard command; consider using purge for specific packages if needed
 # Uncomment the following line if you have specific packages to purge
 # log_message "Purging specific packages..."
-# sudo apt purge <package_name> | tee -a "$LOGFILE"
+# sudo apt-get purge <package_name> | tee -a "$LOGFILE"
 
 # Update Flatpak applications
 log_message "Updating Flatpak applications..."
-sudo flatpak update -y | tee -a "$LOGFILE"
+sudo flatpak update -y 2>> "$LOGFILE"
 
 # Completion message
 log_message "All updates and cleanups completed successfully at $(date)!"
