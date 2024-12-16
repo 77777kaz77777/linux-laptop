@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Function to check the exit status of the last command
+check_status() {
+    if [ $? -ne 0 ]; then
+        echo "Error occurred during the last command. Exiting."
+        exit 1
+    fi
+}
+
+# Update package index
+echo "Updating package index..."
+sudo apt update
+check_status
+
+# Upgrade installed packages
+echo "Upgrading installed packages..."
+sudo apt full-upgrade
+check_status
+
+# Remove unnecessary packages
+echo "Removing unnecessary packages..."
+sudo apt autoremove
+check_status
+
+# Clean up local repository
+echo "Cleaning up local repository..."
+sudo apt autoclean
+check_status
+
+# Note: autopurge is not a standard command; consider using purge for specific packages if needed
+# Uncomment the following line if you have specific packages to purge
+# echo "Purging specific packages..."
+# sudo apt purge <package_name>
+# check_status
+
+# Update Flatpak applications
+echo "Updating Flatpak applications..."
+sudo flatpak update
+check_status
+
+echo "All updates and cleanups completed successfully at $(date)!"
