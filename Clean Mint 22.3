@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Ensure we are running with sudo
+if [ "$EUID" -ne 0 ]; then 
+  echo "Please run as root (use sudo)"
+  exit
+fi
+
+echo "--- Starting Mint 22.3 Debloat (Safe Mode) ---"
+
+# 1. Remove Legacy/Insecure Network Tools
+echo "Removing legacy network tools (telnet, etc)..."
+apt purge -y telnet ftp rsh-client talk
+
+# 2. Remove "Common" Pre-installed Bloat
+# This targets apps most people replace or never use.
+echo "Removing common bloat apps..."
+apt purge -y \
+    hexchat \
+    thunderbird \
+    transmission-common \
+    transmission-gtk \
+    drawing \
+    sticky \
+    pix \
+    hypnotix \
+    thingy \
+    warpinator \
+    gnome-calendar \
+    gnome-logs \
+   
+
+# 3. Remove Default Games
+echo "Removing pre-installed games..."
+apt purge -y gnome-chess five-or-more four-in-a-row gnome-klotski gnome-mahjongg gnome-mines gnome-nibbles gnome-robots gnome-sudoku gnome-taquin gnome-tetravex hitori iagno lightsoff quadrapassel tali swell-foop
+
+# 4. Cleanup Unused Dependencies
+echo "Cleaning up..."
+apt autoremove -y
+apt clean
+
+echo "--- Debloat Complete! ---"
+echo "Note: Printer (CUPS) and Bluetooth services were kept intact."
